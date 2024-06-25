@@ -23,7 +23,7 @@ public class Customer {
 		for (Rental each : rentals) {
 			double thisAmount = each.importeAlquiler();
 			
-			frequentRenterPoints = each.puntosDeAlquilerFrecuente(frequentRenterPoints);
+			frequentRenterPoints += each.puntosDeAlquilerFrecuente(frequentRenterPoints);
 			
 			// Muestra el importe de esta película alquilada
 			result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";

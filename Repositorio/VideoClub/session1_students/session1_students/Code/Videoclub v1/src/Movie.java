@@ -1,12 +1,16 @@
+import estrategia.TipoPelicula;
+
 public class Movie {
 	
 	public static final int CHILDRENS = 2;
 	public static final int NEW_RELEASE = 1;
 	public static final int REGULAR = 0;
 	
-	public Movie(String title, int priceCode) {
+	private TipoPelicula tipo;
+	
+	public Movie(String title, TipoPelicula p) {
 		this.title = title;
-		this.priceCode = priceCode;
+		this.tipo = p;
 	}
 	
 	public int getPriceCode() {
@@ -20,6 +24,14 @@ public class Movie {
 	public String getTitle() {
 		return title;
 	}	
+
+	int puntosDeAlquiler(Rental rental, int frequentRenterPoints) {
+		return tipo.puntosDeAlquiler(frequentRenterPoints);
+	}
+
+	double importeAlquiler(Rental rental) {
+		return tipo.importeAlquiler(rental.getDaysRented());
+	}
 
 	private String title;
 	private int priceCode;
