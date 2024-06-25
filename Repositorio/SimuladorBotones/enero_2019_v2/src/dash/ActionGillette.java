@@ -1,14 +1,17 @@
 package dash;
-public class AccionGillette implements Accion {
+
+public class ActionGillette implements Action {
 
 	@Override
-	public void execute() {
+	public void accion() {
 		System.out.println("Conectando con el servidor...");
         System.out.println("Pedido online realizado de Gillete");
+
 	}
 
 	@Override
-	public String descipcion() {
+	public String getDescription() {
+		// TODO Auto-generated method stub
 		return "Pedir online Gillette";
 	}
 
