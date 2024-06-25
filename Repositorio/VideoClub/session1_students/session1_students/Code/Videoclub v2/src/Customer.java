@@ -24,27 +24,11 @@ public class Customer {
 			double thisAmount = 0;
 			
 			// Calcula el importe de cada alquiler
-			switch (each.getMovie().getPriceCode()) {
-			case Movie.REGULAR:
-				thisAmount += 2;
-				if (each.getDaysRented() > 2) 
-					thisAmount += (each.getDaysRented() - 2) * 1.5;
-				break;
-			case Movie.NEW_RELEASE:
-				thisAmount += each.getDaysRented() * 3;
-				break;
-			case Movie.CHILDRENS:
-				thisAmount += 1.5;
-				if (each.getDaysRented() > 3)
-					thisAmount += (each.getDaysRented() - 3) * 1.5;
-				break;
-			}
+			thisAmount = each.getPrecioAlquiler();
 			
 			// Añade los puntos de alquiler frecuente
-			frequentRenterPoints++;
-			// Un punto extra en el caso de las novedades alquiladas por un período de dos o más días
-			if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1) 
-				frequentRenterPoints++;
+			
+			frequentRenterPoints += each.getPuntosAlquiler();
 			
 			// Muestra el importe de esta película alquilada
 			result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";

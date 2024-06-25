@@ -14,6 +14,14 @@ public class Rental  {
 		return movie;
 	}
 
+	int getPuntosAlquiler() {
+		return movie.getPuntosAlquiler(daysRented);
+	}
+
+	double getPrecioAlquiler() {
+		return movie.getPrecioAlquiler(daysRented);
+	}
+
 	private Movie movie;
 	private int daysRented;
 }
