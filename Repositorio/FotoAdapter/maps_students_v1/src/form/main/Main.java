@@ -1,6 +1,7 @@
 package form.main;
 
 import form.Form;
+import form.adapter.EditorMonumento;
 import google.maps.*;
 import model.*;
 
@@ -13,9 +14,10 @@ public class Main {
 				"via Madonna dei Monti, 9, 00184 Roma, Italia", "+39 06 6798643");
 		
 		Form form = new Form();
-		form.edit(coliseo);
+		form.edit(new EditorMonumento(coliseo));
 		
 		// Tarea 1. Editar también el restaurante: que se puedan editar el nombre y la dirección
+		form.edit(new EditorFoto(photoColosseum));
 		
 		// Tarea 2. Editar también la foto (usuario y descripción)
 	}

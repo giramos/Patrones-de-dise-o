@@ -23,14 +23,14 @@ public class Photo {
 	}
 
 	public void show() {
-		System.out.printf("Abriendo la foto %s...\n",description);
+		System.out.printf("Abriendo la foto %s...\n", description);
 	}
-	
+
 	private String description;
-	
+
 	// Información del usuario que ha subido la foto
 	private String user;
-	
+
 	// Coordenadas donde está tomada la foto
 	private Coordinates coordinates;
 
@@ -38,6 +38,14 @@ public class Photo {
 	public String toString() {
 		return "Photo [description=" + description + ", user=" + user + ", coordinates=" + coordinates + "]";
 	}
-	
-	
+
+	public void setUser(String value) {
+		this.user = value;
+
+	}
+
+	public void setDescription(String value) {
+		this.description = value;
+	}
+
 }
