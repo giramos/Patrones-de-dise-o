@@ -1,0 +1,22 @@
+Examen inventado:
+
+Se proporciona un programa para ver listados de juegos
+de ordenador. El programa permite ordenar los juegos por
+la columna que seleccione el usuario.
+
+Se pide:
+
+Ejercicio 1
+
+Modificar el programa anterior para permitir ordenación
+por multiples columnas. Esto es, si el usuario introduce 
+mas de una columna en el programa (separadas por espacios
+o comas), este ordenará por la primera, si esta es igual
+por la segunda, y así sucesivamente.
+
+Ejercicio 2
+
+Añadir la posibilidad de ordenar de manera inversa. Si
+el primer valor introducido es una "i" en lugar de un
+número de columna. Realizar la ordenación de la misma
+manera pero cambiando el sentido de ordenación.
