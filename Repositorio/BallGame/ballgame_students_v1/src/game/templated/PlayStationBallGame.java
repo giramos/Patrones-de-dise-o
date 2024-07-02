@@ -1,15 +1,15 @@
-package game.adapter;
+package game.templated;
 
 import java.awt.Point;
 
 import platform.Image2D;
 import platform.playstation.Playstation5API;
 
-public class AdapterPlay extends AbstractAdapter {
+public class PlayStationBallGame extends AbstractBallGame {
 
 	Playstation5API playstation;
 
-	public AdapterPlay() {
+	public PlayStationBallGame() {
 		this.playstation = new Playstation5API();
 	}
 

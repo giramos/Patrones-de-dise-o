@@ -1,15 +1,15 @@
-package game.adapter;
+package game.templated;
 
 import java.awt.Point;
 
 import platform.Image2D;
 import platform.android.AndroidAPI;
 
-public class AdapterAndroid extends AbstractAdapter {
+public class AndroidBallGame extends AbstractBallGame {
 
 	private AndroidAPI android;
 
-	public AdapterAndroid() {
+	public AndroidBallGame() {
 		super();
 		this.android = new AndroidAPI();
 	}

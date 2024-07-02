@@ -1,15 +1,15 @@
-package game.adapter;
+package game.templated;
 
 import java.awt.Point;
 
 import platform.Image2D;
 import platform.windows.WindowsAPI;
 
-public class AdapterWindows extends AbstractAdapter {
+public class WindowsBallGame extends AbstractBallGame {
 
 	WindowsAPI windows;
 	
-	public AdapterWindows() {
+	public WindowsBallGame() {
 		this.windows = new WindowsAPI();
 	}
 	@Override

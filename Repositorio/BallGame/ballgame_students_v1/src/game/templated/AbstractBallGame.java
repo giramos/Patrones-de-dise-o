@@ -1,13 +1,13 @@
-package game.adapter;
+package game.templated;
 
 import java.awt.Point;
 
 import game.BallGame;
 import platform.Image2D;
 
-public abstract class AbstractAdapter implements BallGame {
+public abstract class AbstractBallGame implements BallGame {
 
-	public AbstractAdapter() {
+	public AbstractBallGame() {
 		super();
 	}
 
