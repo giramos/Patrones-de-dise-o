@@ -33,4 +33,11 @@ public class Photo {
 	
 	// Coordenadas donde está tomada la foto
 	private Coordinates coordinates;
+
+	@Override
+	public String toString() {
+		return "Photo [description=" + description + ", user=" + user + ", coordinates=" + coordinates + "]";
+	}
+	
+	
 }

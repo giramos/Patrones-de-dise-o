@@ -1,7 +1,12 @@
 package main;
+import adapter.FotoAdapter;
+import adapter.MonumentAdapter;
+import adapter.RestaurantAdapter;
 import database.Database;
-import google.maps.*;
-import model.*;
+import google.maps.Map;
+import model.Monument;
+import model.Photo;
+import model.Restaurant;
 
 public class Main 
 {
@@ -14,15 +19,15 @@ public class Main
 		System.out.println("\n 1. Se añaden varios elementos al mapa...");
 		
 		for (Monument monument : database.selectMonuments()) {
-			// map.add(monument);
+			 map.add(new MonumentAdapter(monument));
 		}
 		
 		for (Photo photo : database.selectPhotos()) {
-			// map.add(photo);
+			 map.add(new FotoAdapter(photo));
 		}
 
 		for (Restaurant restaurant : database.selectRestaurants()) {
-			// map.add(restaurant);
+			 map.add(new RestaurantAdapter(restaurant));
 		}
 
 		// 2. Se dibuja el mapa con los marcadores de los elementos añadidos

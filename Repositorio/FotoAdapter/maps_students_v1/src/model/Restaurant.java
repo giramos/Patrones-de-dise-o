@@ -29,4 +29,10 @@ public class Restaurant {
 	private String name;
 	private String address;
 	private String phone;
+	@Override
+	public String toString() {
+		return name + "\n" + address + "\n" + phone + "]";
+	}
+	
+	
 }
