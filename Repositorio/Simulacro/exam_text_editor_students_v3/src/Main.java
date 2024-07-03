@@ -1,16 +1,24 @@
 import java.io.*;
 import java.util.regex.*;
 
+import exam_text_editor_students_v3.ActionAbrir;
+import exam_text_editor_students_v3.ActionBorrar;
+import exam_text_editor_students_v3.ActionInsertar;
+import exam_text_editor_students_v3.ActionManager;
+import exam_text_editor_students_v3.ActionReemplazar;
+import exam_text_editor_students_v3.Editor;
+
 public class Main 
 {
 	private static BufferedReader in;
-	private static StringBuilder texto;
+	private static ActionManager invoke;
+	
 
 	public static void main(String[] args) throws IOException 
 	{
 		in = new BufferedReader(new InputStreamReader(System.in));
-		texto = new StringBuilder("");
-
+		invoke = new ActionManager();
+		
 		System.out.println("Acciones");
 		System.out.println("--------");
 		System.out.println("abre <fichero>");
@@ -37,43 +45,25 @@ public class Main
 				return;
 
 			if (line[0].equals("abre")) {
-				texto = readFile(line[1]);
+				invoke.execute(new ActionAbrir(line));
 			} else if (line[0].startsWith("ins")) {
-				for (int i = 1; i < line.length; i++) {
-					texto.append(line[i] + " ");
-				}
+				invoke.execute(new ActionInsertar(line));
 			} else if (line[0].startsWith("borr")) {
-				int indexOfLastWord = texto.toString().trim().lastIndexOf(" ");
-				if (indexOfLastWord == -1)
-					texto = new StringBuilder("");
-				else
-					texto.setLength(indexOfLastWord + 1);
+				invoke.execute(new ActionBorrar());
 			} else if (line[0].startsWith("reem")) {
-				texto = new StringBuilder(texto.toString().replaceAll(Pattern.quote(line[1]), line[2]));
+				invoke.execute(new ActionReemplazar(line));
 			} else if (line[0].startsWith("graba")) {
-				;
+				invoke.grabar(line[1]);
 			} else if (line[0].startsWith("para")) {
-				;
+				invoke.parar();
 			} else if (line[0].startsWith("ejecuta")) {
-				;
+				invoke.ejecutar(line[1]);
 			} else {
 				System.out.println("Instrucción desconocida");
 			}
 
-			System.out.println(texto);
+			System.out.println(Editor.getTexto());
 			
 		} while (true);
-	}
-
-	static StringBuilder readFile(String filename) throws IOException 
-	{
-		BufferedReader input = new BufferedReader(new FileReader(filename));
-		String line;
-		StringBuilder result = new StringBuilder();
-		while ((line = input.readLine()) != null) {
-			result.append(line);
-		}
-		input.close();
-		return result;
 	}
 }
