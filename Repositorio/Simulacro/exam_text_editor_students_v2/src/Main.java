@@ -4,14 +4,12 @@ import java.util.regex.*;
 public class Main 
 {
 	private static BufferedReader in;
-	static StringBuilder texto;
-	static Invoker invoker;
 
 	public static void main(String[] args) throws IOException 
 	{
 		in = new BufferedReader(new InputStreamReader(System.in));
-		texto = new StringBuilder("");
-		invoker = new Invoker();
+		Invoker invoker = new Invoker();
+		Receptor r = new Receptor();
 
 		System.out.println("Acciones");
 		System.out.println("--------");
@@ -43,20 +41,23 @@ public class Main
 			} else if (line[0].startsWith("ins")) {
 				invoker.execute(new Insertar(line));
 			} else if (line[0].startsWith("borr")) {
-				Receptor.borrar();
+				invoker.execute(new Borrar());
 			} else if (line[0].startsWith("reem")) {
-				Receptor.reemplazar(line);
+				invoker.execute(new Reemplazar(line));
 			} else if (line[0].startsWith("graba")) {
+				r.grabar(line[1]);
 				;
 			} else if (line[0].startsWith("para")) {
+				r.parar();
 				;
 			} else if (line[0].startsWith("ejecuta")) {
+				r.ejecuta(line[1]);
 				;
 			} else {
 				System.out.println("Instrucción desconocida");
 			}
 
-			System.out.println(texto);
+			System.out.println(Receptor.getTexto());
 			
 		} while (true);
 	}
