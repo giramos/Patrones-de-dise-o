@@ -1,9 +1,11 @@
 package remote.ui;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 
 import remote.Remote;
-import remote.Remote.Button;
 
 //Esta clase representa el controlador del mando, quien recibe la pulsación
 //de los botones y se encarga de invocar al método buttonPressed del mando
@@ -38,7 +40,7 @@ public class ButtonController {
 				if (buttonNumber < 1 || buttonNumber > 6) {
 					output.println("Se esperaba un número de botón (entre 1 y 6)");
 				} else {
-					remote.buttonPressed(Button.values()[buttonNumber - 1]);
+					remote.buttonPressed(buttonNumber);
 				}
 			} catch (NumberFormatException e) {
 				output.println("Se esperaba un número de botón");
@@ -46,5 +48,10 @@ public class ButtonController {
 				output.println(e.getMessage());
 			}
 		}
+	}
+
+	public void setRemote(Remote remote2) {
+		remote = remote2;
+		
 	}
 }
