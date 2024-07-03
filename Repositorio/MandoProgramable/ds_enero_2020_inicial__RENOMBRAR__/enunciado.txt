@@ -1,0 +1,15 @@
+Existe un mando a distancia de 6 botones configurables, se trata de hacer que esa configuración funcione pues... bien,
+usando patrones (Mírate el Main pa las configuraciones que tienes que hacer)-
+un boton que hiciese varias cosas a la vez
+el mando servía para la luz, la televisión y el aire acondicionado
+uno de los botones era una macro configurable
+
+Y la segunda parte es que los "dispositivos con los que interactúa el mando" sean... mejor.
+Es decir mira como está ahora, e1 objeto de cada clase por dispositivo, pues mejorarlo.
+Y también, creo que esas clases: AirConditioner.java, Lamp.java y TV.java, son externas a ti y no puedes editarlas (creo)
+
+en cualquier momento el usuario podía cambiar lo que hacía el boton
+	En plan que si ahora encienda la lampara puedas poner la tele tb
+	Vamos para que lo configures desde el main
+
+command y composite
