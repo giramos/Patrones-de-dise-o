@@ -1,25 +1,38 @@
 package scooter;
 
 import scooter.components.*;
+import scooter.state.*;
+import java.util.*;
 
 public class Scooter 
 {	
 	private static final boolean DEBUG = true;
 	
-	private static enum Mode { CHARGING, OFF, LOW_BATTERY, DRIVE }
+	public static enum Mode { CHARGING, OFF, LOW_BATTERY, DRIVE }
 	
 	//-- Los componentes internos del patinete
-	private Display display = new Display();
-	private Battery battery = new Battery();
-	private Motor motor = new Motor(battery);
-	private Light light = new Light();
+	public  Display display = new Display();
+	public Battery battery = new Battery();
+	public Motor motor = new Motor(battery);
+	public  Light light = new Light();
 
 	// El tiempo transcurrido y la distancia recorrida desde que se puso en
 	// marcha (es decir, desde la última vez que se encendió)
-	private int elapsedTime;	// en minutos
-	private double distance;	// en metros
+	public int elapsedTime;	// en minutos
+	public double distance;	// en metros
 	
-	private Mode mode = Mode.OFF;
+	HashMap<Mode, EstadoModo> mapa;
+	
+	private EstadoModo mode;
+	
+	public Scooter() {
+		mapa = new HashMap<>();
+		mapa.put(Mode.CHARGING, new EstadoModoCharging(this));
+		mapa.put(Mode.OFF, new EstadoModoOff(this));
+		mapa.put(Mode.LOW_BATTERY, new EstadoModoLowBattery(this));
+		mapa.put(Mode.DRIVE, new EstadoModoDrive(this));
+		setMode(Mode.OFF);
+	}
 	
 	
 	// Simula el paso del tiempo, en minutos. Si el patinete está en marcha
@@ -46,12 +59,12 @@ public class Scooter
 	//-- Cambio de modo
 	//------------------------------------------------------------------------
 		
-	private void setMode(Mode mode)
+	public void setMode(Mode off)
 	{
 		// sólo para depuración, no tiene utilidad práctica
-		modeChanged(mode); 
+		modeChanged(off); 
 		
-		this.mode = mode;
+		this.mode = mapa.get(off);
 		
 		// cada vez que se cambia el modo se actualiza la información de la pantalla
 		showDisplay();
@@ -71,25 +84,7 @@ public class Scooter
 	//
 	private void advanceOneMinute()
 	{
-		// si está cargando
-		if (mode == Mode.CHARGING) {
-			
-			// La batería, totalmente descargada, tarda 8 horas y media (510 minutos)
-			// en cargarse por completo; así que en un minuto el porcentaje de carga es:
-			// 1 minuto * 100 % / 510 minutos = 0.196078431372549
-			battery.charge(0.196078431372549);	
-		} 
-		// si está en marcha
-		else if (mode == Mode.LOW_BATTERY || mode == Mode.DRIVE) { 
-
-			motor.updateComsumption(1);
-			this.elapsedTime++; 
-			// distancia en metros recorrida en un minuto a la velocidad actual:
-			double distance = (double) motor.getSpeed() * 1000 / 60;
-			this.distance += distance;
-			// comprueba la carga de batería restante por si hiciera falta cambiar de modo
-			checkBatteryLevel();
-		}
+		mode.advanceOneMinute();
 	}
 	
 	// Si la batería se agota mientras el patinete está en marcha, éste se apaga.
@@ -99,21 +94,7 @@ public class Scooter
 	//
 	private void checkBatteryLevel()
 	{
-		assert mode == Mode.LOW_BATTERY || mode == Mode.DRIVE :
-			"Este método está pensado para ser llamado sólo cuando el patinete está en marcha";
-
-		if (battery.isEmpty()) {
-			display.alert("Se agotó la batería: el patinete va a apagarse...");
-			// muestra el estado actual del patinete justo antes de apagarse
-			showDisplay();
-			// se apaga el patinete
-			turnOff();	
-			setMode(Mode.OFF);
-		} else if (mode == Mode.DRIVE && battery.isLow()) {
-			display.alert("Cambiando al modo de batería baja...");
-			motor.setMaximumSpeed(5);
-			setMode(Mode.LOW_BATTERY);
-		}
+		mode.checkBatteryLevel();
 	}
 	
 
@@ -122,55 +103,18 @@ public class Scooter
 	
 	public void pressPowerButton()
 	{
-		if (mode == Mode.OFF) {
-			// ¡Ojo!, que no podemos dar por hecho que al ponerlo en marcha cuando
-			// está apagado va a pasar siempre al modo de conducción normal (DRIVE):
-			// es preciso comprobar primero el nivel de carga de la batería: si es
-			// baja se encenderá directamente en modo LOW BATTERY (excepto si la 
-			// batería ya está totalmente agotada, en cuyo caso ni siquiera se encenderá,
-			// mostrando una advertencia en el visor).
-			if (battery.isEmpty()) {
-				display.alert("Batería insuficiente: cargue el patinete para poder encenderlo");
-				return;
-			}
-			// si hay batería suficiente para encenderlo, comprobamos en qué modo será
-			// (primero hay que poner a cero la distancia y el tiempo y arrancar los componentes)
-			turnOn();
-			if (battery.isLow()) {
-				motor.setMaximumSpeed(5);
-				setMode(Mode.LOW_BATTERY);
-			} else {
-				motor.setMaximumSpeed(25);
-				setMode(Mode.DRIVE);
-			}
-		} else if (mode == Mode.LOW_BATTERY || mode == Mode.DRIVE) {
-			// Si está en marcha, en cualquiera de los modos de conducción, una
-			// pulsación del botón de encendido enciende o apaga las luces
-			if (light.isOn())
-				light.turnOff();
-			else
-				light.turnOn();	
-		}
+		mode.pressPowerButton();
 	}
 	
 	public void longPressPowerButton()
 	{
-		if (mode == Mode.LOW_BATTERY || mode == Mode.DRIVE) {
-			// Si el patinete está en marcha, una pulsación larga lo apaga; pero
-			// hay que esperar a que el patinete esté detenido para poder hacerlo,
-			// no se puede hacer en movimiento
-			if (motor.getSpeed() > 0) {
-				display.alert("No se puede apagar el patinete estando en movimiento");
-				return;
-			}
-			turnOff();	
-			setMode(Mode.OFF);
-		}
+		mode.longPressPowerButton();
 	}
 	
 	public void doublePressPowerButton() 
 	{
 		// Ahora mismo no hace nada
+		mode.doublePressPowerButton();
 	}	
 
 	
@@ -183,9 +127,7 @@ public class Scooter
 	public void turnAccelerator(int amount)
 	{
 		// Sólo tiene efecto cuando el patinete está en marcha
-		if (mode == Mode.LOW_BATTERY || mode == Mode.DRIVE) {
-			motor.accelerate(amount);
-		}
+		mode.turnAccelerator(amount);
 	}
 	
 	
@@ -193,43 +135,19 @@ public class Scooter
 	
 	public void plugPowerAdapter()
 	{
-		if (mode == Mode.CHARGING) 
-			throw new IllegalStateException("¡¿Cómo se va a recibir esta llamada si ya está enchufado?!");
-		
-		if (mode != Mode.OFF) {
-			display.alert("¡Apague el patinete para poder cargarlo!");
-			return;
-		}
-		setMode(Mode.CHARGING);
+		mode.plugPowerAdapter();
 	}
 	
 	public void unplugPowerAdapter()
 	{
-		if (mode != Mode.CHARGING)
-			throw new IllegalStateException("¡¿Cómo se va a desenchufar sin estar enchufado?!");
-		
-		setMode(Mode.OFF);
+		mode.unplugPowerAdapter();
 	}
 	
 	
 	//-- Actualiza la información mostrada en la pantalla, dependiendo del modo
 	public void showDisplay()
 	{
-		if (mode == Mode.OFF)
-			return;
-		if (mode == Mode.CHARGING) {
-			display.charging(getBatteryLevel());
-		} else { // (si está en marcha) 	
-			
-			// modo de marcha a mostrar en la pantalla
-			String drivingMode = "";
-			if (mode == Mode.LOW_BATTERY)
-				drivingMode = "LOW";
-			else if (mode == Mode.DRIVE)
-				drivingMode = "D";
-			
-			display.show(getSpeed(), distance, elapsedTime, drivingMode, light.isOn(), getBatteryLevel());
-		}
+		mode.showDisplay();
 	}
 
 	
@@ -241,23 +159,6 @@ public class Scooter
 	public int getElapsedTime()				{ return elapsedTime; }		
 	public double getBatteryLevel()			{ return battery.getLevel(); }
 	public boolean isLightOn()				{ return light.isOn(); }
-		
-
-	//-- Métodos privados para la inicialización y encendido y apagado de
-	//   los componentes cada vez que se enciende o apaga el patinete
-	
-	private void turnOn()
-	{
-		elapsedTime = 0;
-		distance = 0;
-		motor.turnOn();
-	}
-	
-	private void turnOff()
-	{
-		light.turnOff();
-		motor.turnOff();
-	}
 	
 
 	//-- Métodos para depuración
