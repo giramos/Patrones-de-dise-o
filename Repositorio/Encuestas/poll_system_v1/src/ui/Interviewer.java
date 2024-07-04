@@ -25,7 +25,7 @@ public class Interviewer
 			if (line[0].equals("salir"))
 				return;
 
-			if (line[0].equals("sí"))
+			if (line[0].equals("si"))
 				poll.incrementYeses();
 
 			if (line[0].equals("no"))

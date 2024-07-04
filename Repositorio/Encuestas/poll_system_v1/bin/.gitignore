@@ -1,3 +1,10 @@
 /main/
 /poll/
 /ui/
+/Interface.class
+/BarChart.class
+/PieChart.class
+/SaveResults.class
+/Observer.class
+/PollObserver.class
+/observer/

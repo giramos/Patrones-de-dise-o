@@ -1,58 +1,58 @@
 package poll;
 
-public class Poll 
-{
+import java.util.List;
+import java.util.ArrayList;
+
+import observer.PollObserver;
+
+public class Poll {
 	private int yeses, nos;
 	private String question;
-	
-	public Poll(String question) 
-	{
+	List<PollObserver> lista;
+
+	public Poll(String question) {
 		this.question = question;
+		lista = new ArrayList<PollObserver>();
 	}
 
-	public String getQuestion() 
-	{
+	public String getQuestion() {
 		return question;
 	}
 
-	public int getYeses() 
-	{
+	public int getYeses() {
 		return yeses;
 	}
 
-	public int getNos() 
-	{
+	public int getNos() {
 		return nos;
 	}
 
-	public void incrementYeses() 
-	{
+	public void incrementYeses() {
 		yeses++;
-		updatePieChart();
-		updateBarChart();
-		saveResults();
+		notificar();
 	}
 
-	public void incrementNos() 
-	{
+	public void incrementNos() {
 		nos++;
-		updatePieChart();
-		updateBarChart();
-		saveResults();
+		notificar();
 	}
 
-	private void updateBarChart() 
-	{
-		System.out.println("Dibujando un gráfico de barras...");
+	private void notificar() {
+		for (PollObserver i : lista) {
+			i.update(this);
+		}
 	}
 
-	private void updatePieChart() 
-	{
-		System.out.println("Dibujando un gráfico circular...");
+	public void añadir(PollObserver ob) {
+		lista.add(ob);
 	}
 
-	private void saveResults() 
-	{
-		System.out.println("Guardando los resultados...");
+	public void borrar(PollObserver ob) {
+		lista.remove(ob);
 	}
+
+	public int getVotosTotales() {
+		return getYeses() + getNos();
+	}
+
 }
