@@ -1,0 +1,27 @@
+enchufar
+enchufar
+desenchufar
+desenchufar
+acelerar 90
+avanzar 30
+acelerar 40
+pulsar
+avanzar 15
+pulsar_doble
+pulsar_largo
+acelerar 0
+pulsar_largo
+mostrar
+avanzar 100
+pulsar
+acelerar 100
+avanzar 999
+pulsar
+enchufar
+avanzar 30
+avanzar 400
+pulsar
+acelerar 90
+desenchufar
+pulsar_largo
+salir
