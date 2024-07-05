@@ -12,18 +12,7 @@ public class Main {
 		List<Equipo> equipos = creaEquiposDePrueba();
 		Map<Equipo, List<Equipo>> emparejamientos = generador.empareja(equipos);
 		condiciones.add(new CondicionesContieneCandidato(emparejamientos));
-		
-		
-		
-		imprime(emparejamientos);
-		
-		
-		
-
-		
-		
-		
-		
+		imprime(emparejamientos);	
 	}
 
 	public static List<Equipo> creaEquiposDePrueba() {
